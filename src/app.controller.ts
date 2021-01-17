@@ -12,31 +12,43 @@ export class AppController {
   private username: string;
   private password: string;
 
+  private  usernamePasswordMap = new Map<string, string>();
   constructor(
     private readonly appService: AppService,
     private readonly configService: ConfigService) {
       this.host = this.configService.get('email.host');
       this.port = this.configService.get('email.port');
       this.secure = this.configService.get('email.secure');
-      this.username = this.configService.get('email.username');
-      this.password = this.configService.get('email.password');
+
+      const usernames = this.configService.get('email.usernames').split(",");
+      const passwords = this.configService.get('email.passwords').split(",");
+      
+      usernames.forEach((username, index) => {
+        this.usernamePasswordMap.set(username, passwords[index]);
+      })
     }
   
   @EventPattern('email')
   async  sendEmail(mailOptions: SendEmailOpts) {
-    console.log('message received 111    ', mailOptions)
+    
+     const username = mailOptions.from.split('<')[1].split('>')[0];
+     const password = this.usernamePasswordMap.get(username);
+     if(!password) {
+        throw new Error('Password for this username not found')
+     }
+
      if(!mailOptions.to) {
-        throw new BadRequestException('No Email Recipient')
+        throw new Error('No Email Recipient')
       }
 
         let transporter = nodemailer.createTransport({
             
           host: this.host,
             port: this.port,
-            secure: this.secure, // true for 465, false for other ports
+            secure: this.secure,
             auth: {
-                user: this.username,
-                pass: this.password
+                user: username,
+                pass: password
             },
             
             
