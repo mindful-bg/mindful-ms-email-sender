@@ -28,16 +28,15 @@ export class AppController {
       })
     }
   
-  @EventPattern('email')
-  async  sendEmail(mailOptions: SendEmailOpts) {
-    
-     const username = mailOptions.from.split('<')[1].split('>')[0];
+    @EventPattern("send-email")    
+    async handleSendEmail(data: SendEmailOpts) {  
+      const username = data.from.split('<')[1].split('>')[0];
      const password = this.usernamePasswordMap.get(username);
-     if(!password) {
+     if(!password) {   
         throw new Error('Password for this username not found')
      }
 
-     if(!mailOptions.to) {
+     if(!data.to) {
         throw new Error('No Email Recipient')
       }
 
@@ -54,7 +53,7 @@ export class AppController {
             
         });
 
-         await transporter.sendMail(mailOptions, async (error, info) => {
+         await transporter.sendMail(data, async (error, info) => {
                 if (error) {      
                   console.log('Could not send email, err', error);
                   }                
