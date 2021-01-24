@@ -28,7 +28,7 @@
     "@nestjs/platform-express": "^7.5.1",
     "amqp-connection-manager": "^3.2.1",
     "amqplib": "^0.6.0",
-    "mindful-commons": "^1.0.21",
+    "mindful-commons": "^1.0.30",
     "nodemailer": "^6.4.17",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
