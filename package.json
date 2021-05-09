@@ -27,7 +27,7 @@
     "@nestjs/microservices": "^7.6.13",
     "@nestjs/platform-express": "^7.6.13",
     "amqp-connection-manager": "^3.2.2",
-    "amqplib": "^0.6.0",
+    "amqplib": "^0.7.1",
     "mindful-commons": "^1.0.99",
     "ms-helpers-lib": "^1.0.89",
     "nodemailer": "^6.5.0",
