@@ -11,8 +11,6 @@ export class AppController {
   private host: string;
   private port: string;
   private secure: boolean;
-  private username: string;
-  private password: string;
 
   private usernamePasswordMap = new Map<string, string>();
   constructor(
@@ -49,6 +47,7 @@ export class AppController {
       this.logger.error('Wrong config for email.passwords', 'Out of context');
       throw new Error('Wrong config for email.passwords');
     }
+
     usernames.forEach((username, index) => {
       this.usernamePasswordMap.set(username, passwords[index]);
     });
@@ -60,7 +59,16 @@ export class AppController {
       ? mindfulPayload.loggedUser.email
       : null;
     const username = mindfulPayload.payload.from.split('<')[1].split('>')[0];
+
     const password = this.usernamePasswordMap.get(username);
+
+    if (!password) {
+      this.logger.error(
+        'Mindful password not found for email ' + username,
+        mindfulPayload.trace,
+      );
+      return;
+    }
 
     this.logger.log(
       'About to send email to recepient',
