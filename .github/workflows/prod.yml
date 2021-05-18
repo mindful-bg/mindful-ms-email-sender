@@ -6,7 +6,7 @@ name: CI
 on:
   # Triggers the workflow on push or pull request events but only for the master branch
   push:
-    branches: [ develop ]
+    branches: [ master ]
 #   pull_request:
 #     branches: [ master ]
 
@@ -25,7 +25,7 @@ jobs:
       - name: ls -a via OPEN SSH Private Key
         uses: appleboy/ssh-action@master
         with:
-          host: ${{ secrets.DEPLOY_HOST }}
+          host: ${{ secrets.DEPLOY_PROD_HOST }}
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.PRIVATE_KEY }}
           passphrase: ${{ secrets.SSH_PASSPHRASE }}
